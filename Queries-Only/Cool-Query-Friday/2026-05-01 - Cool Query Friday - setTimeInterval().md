@@ -43,3 +43,12 @@ setTimeInterval(start="1h")
 | event_platform=Win #event_simpleName=DnsRequest ContextBaseFileName="powershell.exe"
 | !match(table="ps_dns", field=DomainName, strict=true)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Q&A
+
+**Q — [Community] dial647:** I have a question. I am trying to run a query for a 7 day period, and want the results when I have more than x number of events within a 10 mins time frame. Is it possible to achieve this using this statement?
+
+**A — [CS] Andrew-CS:** Hi there. You’d want to use slidingTimeWindow(). We have a writeup on that [here](https://www.reddit.com/r/crowdstrike/s/KcZ1lzf6L4).

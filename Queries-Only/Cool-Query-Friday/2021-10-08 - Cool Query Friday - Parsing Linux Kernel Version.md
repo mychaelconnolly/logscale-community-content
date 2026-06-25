@@ -50,3 +50,11 @@ index=main sourcetype=OsVersionInfo* event_platform=lin event_simpleName=OsVersi
 | table aid, ComputerName, Version, kernelVersion, AgentVersion, FirstSeen, BiosManufacturer, Continent, Country, Timezone
 | rename aid as "Falcon Agent ID", ComputerName as "Endpoint", Version as "OS", kernelVersion as "Kernel", AgentVersion as "Falcon Version", FirstSeen as "Falcon Install Date", BiosManufacturer as "BIOS Maker"
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Operational caveats
+
+> Ah! Sorry, I misunderstood. In your RTR feed, do you have the field OSVersionFileData? If yes, what are you using to look at RTR? Splunk?
+— [CS] Andrew-CS · score 1

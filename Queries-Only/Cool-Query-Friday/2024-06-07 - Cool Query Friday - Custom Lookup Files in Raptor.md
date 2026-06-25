@@ -89,3 +89,28 @@ The syntax is well commented, so you can see what’s going on.
 | drop([rootURL, ParentProcessId, URL])
 Once executed, you will have output that looks similar to this:
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+#event_simpleName=ProcessRollup2 event_platform="Win"
+| !in(field=FileName, values=[wsl.exe], ignoreCase=true)
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] HJForsythe:** Weird question but if you know that is a threat why not detect and alert on it by default?
+
+**A — [CS] Andrew-CS:** Hey there. Not weird at all. In my instance, this was me testing so I had dummy data. I took an icon from the Desktop and named it cmd.exe and just ran it. Nothing malicious was happening. Falcon has native detections for masquerading, but I always like knowing what's going on. You'll find that some application makers will bundle things named "cmd.exe" or "explorer.exe" with their programs. It's kind of annoying. I hope that helps.
+
+**Q — [Community] jarks_20:** If we import the MAC address like you mentioned for example, is there an specific format we need to follow when importing it?
+
+**A — [CS] Andrew-CS:** Oh. The easiest way would be to use a MAC in a lookup in the same format they are in in `aid_master_main` (which is 00-00-00-00-00-00). Capitalization doesn't matter. You could then merge against that. If you have MAC addresses in a different format (00:00:00:00:00:00), you could always use `replace()` on the Falcon data so it matches.
+
+**Q — [Community] Rude-Comfortable9463:** how would i exclude specific FileName, for example wsl.exe in the query without the need to alter the csv?
+
+**A — [CS] Andrew-CS:** Make the first two lines: #event_simpleName=ProcessRollup2 event_platform="Win" | !in(field=FileName, values=[wsl.exe], ignoreCase=true)

@@ -43,3 +43,12 @@ event_simpleName=CustomIOABasicProcessDetectionInfoEvent TemplateInstanceId_deci
 |  stats dc(aid) as endpointCount count(aid) as alertCount by ParentImageFileName, ImageFileName, CommandLine
 | sort - alertCount
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Q&A
+
+**Q — [Community] jmcybersec:** The github log4j scanning script references a cast.exe file, but there is a 404 when i attempt to download and it doesn't show up anywhere on there? Any ideas what happened to this?
+
+**A — [CS] Andrew-CS:** Hi there. If you download this file from Git and decompress it you'll get `cast.exe`: https://github.com/CrowdStrike/CAST/releases/download/v0.6.0/cast\_0.6.0\_Windows\_amd64.tar.gz

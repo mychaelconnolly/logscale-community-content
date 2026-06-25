@@ -58,3 +58,29 @@ aid=?aid (#event_simpleName=AssociateIndicator OR #event_simpleName=ProcessRollu
 | drop([rootURL])
 | sort(@timestamp, order=desc, limit=20000)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| groupBy([aid, TargetProcessId], function=([count(aid, as=Occurrences), selectFromMin(field="@timestamp", include=[@timestamp]), collect([ComputerName, UserName, ExecutionChain, Tactic, Technique, DetectDescription, CommandLine])]))
+```
+— [CS] Andrew-CS · comment score 2
+
+```cql
+| groupBy([aid, TargetProcessId], function=([count(aid, as=Occurrences), selectFromMin(field="@timestamp", include=[@timestamp]), collect([ComputerName, UserName, ExecutionChain, Tactic, Technique, DetectDescription, CommandLine])]), limit=max)
+```
+— [CS] Andrew-CS · comment score 2
+
+### Operational caveats
+
+> Comments have a certain size limit and adding raw syntax will likely always break that limit. The comments section isn't really designed to show JSON. You might be able to link to the workflow execution URL so you can quickly pivot to the formatted results.
+— [CS] Andrew-CS · score 1
+
+### Q&A
+
+**Q — [Community] xplorationz:** Can you trigger Fusion workflow using API? and get output via API. (New to Falcon)
+
+**A — [CS] bk-CS:** Yes, on-demand fusion workflows can be triggered using `POST /workflows/entities/execute/v1`. You can separate the event search portion of Andrew's example into an on-demand workflow which would allow you to trigger it via API and also call it in a detection-triggered workflow.

@@ -84,3 +84,19 @@ event_simpleName=UserAccountAddedToGroup
 | convert ctime(endpointTime) ctime(cloudTime)
 | sort + endpointTime
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| search NOT GrouRid_dec IN (500, 501)
+```
+— [CS] Andrew-CS · comment score 2
+
+### Q&A
+
+**Q — [Community] fang8280:** How do you exempt well known domain groups from being looked up? OR lets say if we know a set of Domain SID's that we want to exempt from the lookup process, how can those be exempted.
+
+**A — [CS] Andrew-CS:** >event\_simpleName=UserAccountAddedToGroup | fields aid, ComputerName, ContextTimeStamp\_decimal, DomainSid, GroupRid, LocalAddressIP4, UserRid, timestamp | eval GroupRid\_dec=tonumber(ltrim(tostring(GroupRid), "0"), 16) | eval UserRid\_dec=tonumber(ltrim(tostring(UserRid), "0"), 16) | eval UserSid\_readable=DomainSid. "-" .UserRid\_dec | lookup local=true usersid\_username\_win.csv UserSid\_readable OUTPUT UserName | lookup local=true grouprid\_wingroup.csv GroupRid\_dec OUTPUT WinGroup | filln …

@@ -127,3 +127,11 @@ Welcome to our fiftieth (50, baby!) installment of [Cool Query Friday](https://w
 //Search for http or https in command line
 | decodedCommand=/https?/i
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Operational caveats
+
+> Splunk was never “the back end”, that’s Threat, Intel or Asset Graph depending on module. What you’re seeing in the GUI is a highly customized version of the Splunk UI that can access this data and facilitates capabilities for raw searching. I’m not going to spoil our future but we have big things planned, be sure to attend the quarterly roadmap calls for more information!
+— [CS] BradW-CS · score 3

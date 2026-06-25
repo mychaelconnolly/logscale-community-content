@@ -244,3 +244,27 @@ EventType="Event_ExternalApiEvent" ExternalApiType="Event_DetectionSummaryEvent"
 ```cql
 | format("%,.100s", field=CommandLine, as=CommandLine)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| match(file="lookup-file.csv", column=aid, field=aid, include=[Version, AgentVersion])
+```
+— [CS] Andrew-CS · comment score 2
+
+### Q&A
+
+**Q — [Community] mattdufrene:** in LogScale, is it possible to reference multiple fields/columns in a lookup table?
+
+**A — [CS] Andrew-CS:** Like all languages, you need a single key field to specify a "row" but you can output multiple "columns" related to that key field. Example: | match(file="lookup-file.csv", column=aid, field=aid, include=[Version, AgentVersion]) Documentation is [here](https://library.humio.com/falcon-logscale/functions-match.html#functions-match-examples).
+
+**Q — [Community] mattdufrene:** We're currently a Splunk shop, but recently pulled the trigger to migrate to LogScale. We are in the process of migrating searches and are working out the best way to leverage our lookup tables. In Splunk, you could match against values from multiple columns. For example: `| search [ inputlookup loo …
+
+**A — [CS] Andrew-CS:** Hey! Thanks for choosing LogScale! I don't know the exact answer to this question, so I'm going to tag in u/AHogan-CS to see if he knows.
+
+**Q — [Community] BigOwlCriesForLogs:** LogScale looks like an amazing product. Is there a way to try it out and play with it on my own?
+
+**A — [CS] Andrew-CS:** >If you want to mess around with LogScale on your own, there is a free Community Edition available. If you want to mess around with LogScale on your own, there is a [free Community Edition available](http://cloud.community.humio.com/).

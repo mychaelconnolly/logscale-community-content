@@ -147,3 +147,19 @@ index=main sourcetype=UserLogon* event_simpleName=UserLogon event_platform=win
 | stats sum(weirdnessCoefficient) as weirdnessCoefficient, dc(aid) as uniqueEndpoints, count(aid) as totalLogons by UserSid_readable, UserName, AccountType 
 | sort - weirdnessCoefficient
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| eval weirdnessCoefficient=ratingServiceAccountInteractive + ratingRdpToDc + ratingInteractiveServer + ratingexternalRDP + ratingPasswdAge + ratingDomainAdmin
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] kevinelwell:** You can register for free here: [https://mitre.brandlive.com/mitre-attackcon-3/en](https://mitre.brandlive.com/mitre-attackcon-3/en) The presenter was Halee Mills **Tracking Noisy Behavior and Risk-Based Alerting with ATT&CK** Having ATT&CK to identify threats, prioritize data sources, and improve s …
+
+**A — [CS] Andrew-CS:** Oh yeah! Thanks. Fixed. It was counted twice in this line: | eval weirdnessCoefficient=ratingServiceAccountInteractive + ratingRdpToDc + ratingInteractiveServer + ratingexternalRDP + ratingPasswdAge + ratingDomainAdmin

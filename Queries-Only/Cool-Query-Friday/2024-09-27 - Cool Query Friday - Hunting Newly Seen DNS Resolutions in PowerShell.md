@@ -134,3 +134,21 @@ Welcome to our seventy-eighth installment of Cool Query Friday. The format will 
 // Set default values for GeoIP fields to make output look prettier
 | default(value="-", field=[FirstIP4Record.country, FirstIP4Record.city, FirstIP4Record.state])
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+// Get DnsRequest events tied to PowerShell
+#event_simpleName=DnsRequest event_platform=Win ContextBaseFileName=powershell.exe
+| DomainName!=/(.?myinternaldomain.com$)/
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] yankeesfan01x:** Is there a way to only include external DNS name resolutions and nothing internal?
+
+**A — [CS] Andrew-CS:** How do you classify internal? You could make the first two lines something like: // Get DnsRequest events tied to PowerShell #event_simpleName=DnsRequest event_platform=Win ContextBaseFileName=powershell.exe | DomainName!=/(.?myinternaldomain.com$)/

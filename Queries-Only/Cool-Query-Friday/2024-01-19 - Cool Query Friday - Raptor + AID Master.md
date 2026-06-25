@@ -102,3 +102,32 @@ event_simpleName=ProcessRollup2
 | groupBy([aid], function=([selectFromMax(field="@timestamp", include=[ComputerName]), collect([FalconGroupingTags], multival=false)]))
 | sankey(source="ComputerName", target="FalconGroupingTags", weight=count(aid))
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+//| in(name, values=[NeighborListIP4V2, NeighborListIP4MacV1])
+```
+— [CS] Andrew-CS · comment score 1
+
+```cql
+| $falcon/investigate:not_managed()
+```
+— [CS] Andrew-CS · comment score 1
+
+```cql
+#repo=base_sensor #event_simpleName=ImageHash FileName=cellulardatacapabilityhandler.dll
+| join(query={#repo=sensor_metadata #data_source_name=aidmaster 
+| groupBy([aid], function=selectLast(AgentVersion), limit=max)} , field=[aid], include=[AgentVersion]) 
+| table(fields=["aid","AgentVersion","FileName"])
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] 65c0aedb:** How do you enrich events with `ComputerName` based on `aid` when you have more than 100000 hosts in `aid_master` ? Here my `groupBy` are yielding all sorts of warnings about chopped data, and a random number of `ComputerName` get outputted each time, usually 0 or 1. I sorted out my situation by pick …
+
+**A — [CS] Andrew-CS:** You would want to override the default `groupBy` limit. #repo=base_sensor #event_simpleName=ImageHash FileName=cellulardatacapabilityhandler.dll | join(query={#repo=sensor_metadata #data_source_name=aidmaster | groupBy([aid], function=selectLast(AgentVersion), limit=max)} , field=[aid], include=[AgentVersion]) | table(fields=["aid","AgentVersion","FileName"])

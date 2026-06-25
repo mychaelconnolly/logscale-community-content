@@ -28,3 +28,16 @@ Get-FalconHost -Filter "platform_name:'Windows'" -All | Invoke-FalconRtr -Comman
 ```cql
 Get-FalconHost -Limit 100 -Detailed | Send-FalconEvent
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Q&A
+
+**Q — [Community] netsec_:** How do you get the results from this if you don't?
+
+**A — [CS] Andrew-CS:** You can always issue bulk RTR commands using PSFalcon and then invoke `Get-FalconQueue` to view the results.
+
+**Q — [Community] big_mic_energy:** How does this setup differ if Falcon and LogScale are products we already own? Keeping in mind I am an admin for both products and Falcon has been collecting data for years now.
+
+**A — [CS] Andrew-CS:** You can just have Falcon redirect the RTR output to the LogScale instance you have running. You just have to make sure your URL is correct as is outlined in this section: >Copy the URL under “Ingest host name” as well. You can just follow my lead if you’re using Community Edition, however, if you’re a full LogScale customer this URL will be different so please make note of it.

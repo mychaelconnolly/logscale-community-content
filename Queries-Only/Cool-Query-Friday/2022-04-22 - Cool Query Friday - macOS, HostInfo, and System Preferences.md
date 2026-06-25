@@ -111,3 +111,16 @@ event_platform=mac sourcetype=HostInfo* event_simpleName=HostInfo
 | sort +ComputerName
 | rename aid as "Falcon Agent ID", ComputerName as "Endpoint", SystemManufacturer as "System Maker", SystemProductName as "Product Name", Version as "OS", AgentVersion as "Falcon Version", macosRemediations as "Configuration Issues"
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Q&A
+
+**Q — [Community] soroyaya:** I was just trying this, great stuff! Would you have any comments on below? 1) Can you explain what information `PasswordRequiredIsSet_decimal` captures? 2) System Preferences > Software Update (outside the advanced settings) has a tick-box for applying automatic updates. Is there a way to know if th …
+
+**A — [CS] Andrew-CS:** Thanks! Glad it's helpful. Here are the answers: 1. If auto-login for a single user is enabled via "Users and Groups," `PasswordRequiredIsSet_decimal` will be set to `0`. 2. Correct. If that main toggle is NOT enabled, the bitmask value would be `0`.
+
+**Q — [Community] felixguerrero12:** What would "Enabling Full Disk Access for Falcon" grant? What implications might it have not having it turned on?
+
+**A — [CS] Andrew-CS:** If you were to try and put, get, or list files using RTR that would not work as Falcon will not have access to the disk. Functions that require Falcon to read configurations (e.g. Spotlight) might also not work properly. The ability to hash files could also be impacted. FWIW, it's listed as a system requirement so my recommendation would be to allow it unless there is a strong technical reason not to.

@@ -47,3 +47,11 @@ Get-ChildItem "Registry::HKEY_USERS" |
 | CommandLine=/https?/iF
 | table([@timestamp, aid, ComputerName, UserName, UserSid, FileName, CmdLength, CommandLine], sortby=CmdLength, order=desc, limit=500)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Operational caveats
+
+> Hey there. Interrogating and clouding the contents of the call stack for every execution has a negative impact on system performance. That's why it isn't everywhere. Just so you know :) I'll get with research and see if there have been any movements, here.
+— [CS] Andrew-CS · score 2

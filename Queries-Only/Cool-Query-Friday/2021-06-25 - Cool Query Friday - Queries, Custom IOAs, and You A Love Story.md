@@ -37,3 +37,20 @@ event_platform=win event_simpleName=ProcessRollup2 FileName=powershell.exe Produ
 event_simpleName=CustomIOABasicProcessDetectionInfoEvent TemplateInstanceId_decimal=226 
 |  stats dc(aid) as endpointCount count(aid) as alertCount by ParentImageFileName
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+event_platform=win event_simpleName=ProcessRollup2 FileName=powershell.exe ProductType=3
+| lookup local=true aid_policy.csv aid OUTPUT groups
+| eval groups=replace(groups, "'", "\"")
+| spath input=groups output=group_id path={}
+| mvexpand group_id
+| lookup local=true group_info.csv group_id OUTPUT name
+| stats dc(aid) as endpointCount count(aid) as executionCount by ParentBaseFileName, FileName, name
+| sort - executionCount
+```
+— [CS] Andrew-CS · comment score 2

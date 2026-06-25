@@ -46,3 +46,12 @@ event_platform=win event_simpleName=DriverLoad CertificateThumbprint=696b5cb5d85
 | search baseFileLength=4 
 | table _time, aid, ComputerName, FileName, baseFileName, baseFileLength, FilePath, SHA256HashData, CertificateThumbprint
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Q&A
+
+**Q — [Community] jarks_20:** Andrew...is there any goodies :) that you can share in regards with whispergate?
+
+**A — [CS] Andrew-CS:** Hi there, for Falcon Intelligence customers there is a very detailed report here: CSA-220189. We track this activity cluster to the threat actor [EMBER BEAR](https://falcon.crowdstrike.com/intelligence-v2/actors/ember-bear/summary).

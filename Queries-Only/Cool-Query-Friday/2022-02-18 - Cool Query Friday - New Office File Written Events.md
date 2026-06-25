@@ -98,3 +98,13 @@ event_simpleName IN (MSDocxFileWritten, MSPptxFileWritten, MSVsdxFileWritten, MS
 | convert ctime(ContextTimeStamp_decimal)
 | rename aid as "Falcon AID", ComputerName as "Endpoint", UserSid_readable as "User SID", UserName as "User", AccountType as "Account Type", LocalAdminAccess as "Local Admin?", ContextTimeStamp_decimal as "File Written Time", fileExtension as "Extension", MSOfficeSubType as "Office Type", isInDownloads as "Downloads Folder?", isInOutlookTemp as "Outlook Temp?", isOnNetworkDrive as "Network Drive?", isOnRemoveableDrive as "Removable Drive?", ProcExplorer as "Process Explorer Link"
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| lookup local=true userinfo.csv UserSid_readable OUTPUT UserName, AccountType, LocalAdminAccess
+```
+— [CS] Andrew-CS · comment score 1

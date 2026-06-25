@@ -97,3 +97,11 @@ event_platform=win event_simpleName=NetworkListenIP4 LPort<10000
 | stats dc(event_simpleName) as events latest(SystemType) as systemType latest(Version) as osVersion latest(aip) as externalIP latest(LocalAddressIP4) as internalIP values(FileName) as listeningFile values(UserName) as userName values(UserSid_readable) as userSID values(LPort) as listeningPort values(Protocol) as listeningProtocol by aid, ComputerName, falconPID
 | where events > 1
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Operational caveats
+
+> Hi there. You have to enable network events for Linux. It's in the Linux prevention policy: [https://imgur.com/a/sW4MqW1](https://imgur.com/a/sW4MqW1) We provide this option on Linux in the event customers want to disable it on high-performance compute clusters that are calibrated to a very, very precise performance metric.
+— [CS] Andrew-CS · score 2

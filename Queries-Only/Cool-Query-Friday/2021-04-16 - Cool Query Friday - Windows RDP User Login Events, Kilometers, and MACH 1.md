@@ -142,3 +142,16 @@ event_platform=win event_simpleName=UserLogon (RemoteIP!=172.16.0.0/12 AND Remot
 | where speed > 1234
 [...]
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Q&A
+
+**Q — [Community] Affectionate_Will487:** In an environment that allows RDP how would you narrow down to find either a system with let’s say 100 failures on let’s say 100 hosts something like that , or a system that doesn’t use rdp and now all over sudden using rdp, or what are some strange patterns to look for ?
+
+**A — [CS] Andrew-CS:** You want to check failed user logins. CQF here: https://www.reddit.com/r/crowdstrike/comments/m3i45l/20210312\_cool\_query\_friday\_parsing\_and\_hunting/
+
+**Q — [Community] cs-del:** I have a similar scheduled search for my environment monitoring successful RDP connections (logon type 10) originating from external IP address. This is one of the areas that client is mainly interested in. One of the detection from that search is user logon event that shows up a remote IP on client …
+
+**A — [CS] Andrew-CS:** Hi there. In Process Explorer, you're only seeing outbound network connections. You can look for the event `NetworkReceiveAcceptIP4`. Authentications will always be pinned to LSASS as that handles auth for Windows systems.

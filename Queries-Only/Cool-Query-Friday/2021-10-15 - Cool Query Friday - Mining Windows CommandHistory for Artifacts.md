@@ -62,3 +62,19 @@ index=main sourcetype=CommandHistory* event_platform=win event_simpleName=Comman
 | convert ctime(timestamp)
 | rename timestamp as Time, ComputerName as Endpoint, ApplicationName as "Responsible Application", TargetProcessId_decimal as "Falcon PID", passedURL as "URL Fragment", CommandHistory as "Complete Command Context"
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+index=main AND (sourcetype=CommandHistory* event_platform=win event_simpleName=CommandHistory) OR (sourcetype=ProcessRollup* event_platform=win event_simpleName=ProcessRollup2) | rex field=CommandHistory ".(?<passedURL>http(|s)://..(net|com|org|io)).*" | stats dc(event_simpleName) as eventCount, values(ComputerName) as ComputerName, values(FileName) as FileName, values(UserSid_readable) as UserSid_readable, values(CommandHistory) as CommandHistory, values(passedURL) as passedURL, latest(ProcessStartTime_decimal) as time by aid, TargetProcessId_decimal | where eventCount>1 AND isnotnull(passedURL) | lookup local=true userinfo.csv UserSid_readable OUTPUT UserName | table time aid ComputerName UserSid_readable UserName FileName TargetProcessId_decimal passedURL CommandHistory | sort + time | convert ctime(time) | rename time as Time, aid as "Falcon Agent ID", ComputerName as Endpoint, UserSid_readable as "User SID", UserName as User, FileName as File, TargetProcessId_decimal as "Falcon PID", passedURL as "URL", CommandHistory as "Complete Command History"
+```
+— [CS] Andrew-CS · comment score 4
+
+### Q&A
+
+**Q — [Community] Sackman_and_Throbbin:** Is there a way to query the parent process data to determine UserName info?
+
+**A — [CS] Andrew-CS:** Hi there. Try this: index=main AND (sourcetype=CommandHistory* event_platform=win event_simpleName=CommandHistory) OR (sourcetype=ProcessRollup* event_platform=win event_simpleName=ProcessRollup2) | rex field=CommandHistory ".(?<passedURL>http(|s)://..(net|com|org|io)).*" | stats dc(event_simpleName) as eventCount, values(ComputerName) as ComputerName, values(FileName) as FileName, values(UserSid_readable) as UserSid_readable, values(CommandHistory) as CommandHistory, values(passedURL) as passed …

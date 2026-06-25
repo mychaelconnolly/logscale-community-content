@@ -54,3 +54,17 @@ event_platform=win event_simpleName IN (FsVolumeMounted, RemovableMediaVolumeMou
 | rex field=VirtualDriveFileName ".*\\\(?<isoName>.*\.(img|iso))" 
 | regex isoName!="sw_dvd\d\_office\_professional\_plus\_(64|32)bit\_english\_\-\d\_officeonlinesvr_mlf_x\d+\-\d+\.iso"
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Operational caveats
+
+> The ISO has to be mounted - via double clicking - and the Falcon sensor has to be at version 6.40+.
+— [CS] Andrew-CS · score 1
+
+### Q&A
+
+**Q — [Community] jarks_20:** In the case of legit .iso images, what would be the best approach to the detection? Adding exclusions on the search manually would make the week longer :) How to determine if this .iso is not one of ours or externally sent? Does this make sense?
+
+**A — [CS] Andrew-CS:** Any commonality to the ISOs that are yours? Naming conventions, computers interacting with them, location, etc.?

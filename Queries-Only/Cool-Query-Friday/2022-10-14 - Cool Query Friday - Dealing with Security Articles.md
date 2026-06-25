@@ -46,3 +46,16 @@ FILE PATH: .*\\ManageEngine\\ADSelfService\s+Plus\\webapps\\adssp\\help\\admin\-
 
 FILE TYPE: ZIP, SCRIPT, OTHER
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Q&A
+
+**Q — [Community] jashley92:** How do you get crowdscrape to work with us-2? That's been an issue for me.
+
+**A — [CS] Andrew-CS:** Sorry, u/jashley92! I missed your initial question. Working with the developer to make sure cloud is included. I thought it was, but not sure if it was published to the Chrome store.
+
+**Q — [Community] jashley92:** any thoughts here? Is us-2 support perhaps a miss in crowdscrape?
+
+**A — [CS] Andrew-CS:** Sorry, u/jashley92! I missed your initial question. Working with the developer to make sure cloud is included. I thought it was, but not sure if it was published to the Chrome store.

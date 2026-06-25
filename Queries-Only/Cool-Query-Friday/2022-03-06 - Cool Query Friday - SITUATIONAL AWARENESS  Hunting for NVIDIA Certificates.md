@@ -71,3 +71,23 @@ INSERT SHA256 LIST HERE
 | rex field=FilePath ".*\\HarddiskVolume\d+(?<trimmedPath>.*)"
 | stats values(FileName) as fileName, dc(aid) as endpointCount, count(aid) as runCount, values(trimmedPath) as filePaths, values(event_simpleName) as eventType by SHA256HashData
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| inputlookup lookuptable
+```
+— [CS] Andrew-CS · comment score 2
+
+### Q&A
+
+**Q — [Community] cs-del:** Quick question, why did you search through JSON logs rather the main index. If you can give a little insight between both indexing on?
+
+**A — [CS] Andrew-CS:** Hi there. You don't have to specify, but it will make things quicker. The JSON index is basically what will be output by the SIEM connector or ingested by our SIEM integrations. It includes alerts, audit events, etc.
+
+**Q — [Community] MSP-IT-Simplified:** Quick question. In you first query you reference file appinfo.csv, where is that file located?
+
+**A — [CS] Andrew-CS:** Hi there. It's a lookup table similar to `aid_master`. I have a list of the ones I use [here](https://www.reddit.com/r/crowdstrike/comments/oz9oow/comment/h7z7wy8/?utm_source=reddit&utm_medium=web2x&context=3). If you want to view the file by itself, you use the following: | inputlookup lookuptable

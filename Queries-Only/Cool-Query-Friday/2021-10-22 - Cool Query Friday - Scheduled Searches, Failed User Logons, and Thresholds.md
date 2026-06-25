@@ -97,3 +97,34 @@ index=main sourcetype=UserLogonFailed* event_platform=win event_simpleName=UserL
 | convert ctime(firstFailedAttmpt) ctime(lastFailedAttempt)
 | sort -failedLogonAttempts
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+index=main sourcetype=AgentConnect* event_simpleName=AgentConnect 
+| fields aip, aid, ConnectTime_decimal 
+| stats latest(aip) as aip latest(ConnectTime_decimal) as connectionTime by aid
+| iplocation aip 
+| lookup local=true aid_master aid OUTPUT ComputerName 
+| table aid, ComputerName, connectionTime, aip, Country, Region, City
+| convert ctime(connectionTime)
+| rename aid as "Falcon ID", ComputerName as "Endpoint", connectionTime as "Last Connection", aip as "Last External IP"
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] Nerdcentric:** When I test the query it is defaulting back to a search window of "Last 15 minutes". If I am scheduling this to run once every 24 hours, am I only getting the events for the last 15 minutes when it runs? I feel like I missed where you set the search window to 24 hours. Or is that automatic based on …
+
+**A — [CS] Andrew-CS:** Great question. When you click "Schedule Query" the frequency you pick will also be the search window.
+
+**Q — [Community] DreadlockedSOC:** I'm a little late to this party. How do I set my every 24hr scheduled search to query the last 7 days of data? I want my query to grab the last 7 days of data every 24hrs. I tried to add 'earliest -7d' but it barked an error at me.
+
+**A — [CS] Andrew-CS:** At present, 24 hours is the max you can set as we need to assess how ~~soul crushing~~ performant the queries are :)
+
+**Q — [Community] Ballzovsteel:** When I am looking at the delta and delta seconds. What does that exactly mean, is that the time between attempts?
+
+**A — [CS] Andrew-CS:** It’s the time difference between the very first failed login and the very last failed login. So if there were 10 failed attempts, it would be the difference between 1 and 10.

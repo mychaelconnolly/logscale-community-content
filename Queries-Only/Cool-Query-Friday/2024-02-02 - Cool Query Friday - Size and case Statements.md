@@ -114,3 +114,27 @@ Welcome to our seventy-third installment of Cool Query Friday. The format will b
 | groupBy([aid, ComputerName], function=([count(aid, as=TotalWrites), sum(Size, as=TotalWritten), collect([ShortFile])]), limit=max)
 | sort(order=desc, TotalWritten, limit=200)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+#event_simpleName=ProcessRollup2
+| in(field="FileName", values=["CMD.EXE"], ignoreCase=true)
+| groupBy([FileName])
+```
+— [CS] Andrew-CS · comment score 1
+
+```cql
+#event_simpleName=ProcessRollup2 FileName=/^CMD\.EXE$/i
+| groupBy([FileName])
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] williebones:** Is there a way to make an entire search case insensitive? If not maybe specifically a in() function?
+
+**A — [CS] Andrew-CS:** Hi there. There sure is. You can use `in` or regex. Example for `in`: #event_simpleName=ProcessRollup2 | in(field="FileName", values=["CMD.EXE"], ignoreCase=true) | groupBy([FileName]) Example using regex: #event_simpleName=ProcessRollup2 FileName=/^CMD\.EXE$/i | groupBy([FileName]) I hope that helps!

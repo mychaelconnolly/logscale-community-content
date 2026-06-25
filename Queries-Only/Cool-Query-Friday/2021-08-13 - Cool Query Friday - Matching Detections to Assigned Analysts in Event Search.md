@@ -115,3 +115,41 @@ index=json AND (ExternalApiType=Event_UserActivityAuditEvent AND OperationName=d
 | convert ctime(timeStamp)
 | sort + timeStamp
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+earliest=-24h index=json AND (ExternalApiType=Event_UserActivityAuditEvent AND OperationName=detection_update) OR ExternalApiType=Event_DetectionSummaryEvent
+| eval OperationName=lower(OperationName)
+| rename AuditKeyValues{}.Key AS key AuditKeyValues{}.ValueString AS value
+| eval data = mvzip(key,value)
+| rex field=data "detection_id,.*:(?<aid>.*?):(?<detectId>-?\\d+)?"
+| eval detectId="ldt:".aid.":".detectId
+| rex field=data "assigned_to,(?<assigned_to>.*)"
+| rex field=data "assigned_to_uid,(?<assigned_to_uid>.*)"
+| rex field=data "new_state,(?<detectionState>.*)"
+| table *
+| eval detectId=mvappend(DetectId, detectId)
+| eval aid=mvappend(aid, AgentIdString)
+| lookup local=true aid_master aid OUTPUT FalconGroupingTags
+| eval FalconGroupingTags=split(FalconGroupingTags,";")
+| stats values(ComputerName) as computerName, values(FalconGroupingTags) as FalconTags,
+last(UTCTimestamp) as timeStamp, values(FileName) as fileNames, values(SHA256String) as sha256Values, values(assigned_to) as assignedTo, last(detectionState) as detectionState, values(DetectName) as detectName, max(Severity) as Severity, values(Tactic) as tactic, values(Technique) as technique, values(SeverityName) as SeverityNames values(FalconHostLink) as falconLink by aid, detectId
+| where isnotnull(falconLink)
+| eval Severity=case(Severity=1, "Informational", Severity=2, "Low", Severity=3, "Medium", Severity=4, "High", Severity=5, "Critical")
+| eval timeStamp=timeStamp/1000
+| convert ctime(timeStamp)
+| sort + timeStamp
+| fillnull assignedTo value="-"
+| fillnull detectionState value="new"
+```
+— [CS] Andrew-CS · comment score 3
+
+### Q&A
+
+**Q — [Community] BingBongTheArcher23:** Is there a way to include the corresponding filehash information or the status (TP/FP/Ignored/etc) of the events?
+
+**A — [CS] Andrew-CS:** Yup! earliest=-24h index=json AND (ExternalApiType=Event_UserActivityAuditEvent AND OperationName=detection_update) OR ExternalApiType=Event_DetectionSummaryEvent | eval OperationName=lower(OperationName) | rename AuditKeyValues{}.Key AS key AuditKeyValues{}.ValueString AS value | eval data = mvzip(key,value) | rex field=data "detection_id,.*:(?<aid>.*?):(?<detectId>-?\\d+)?" | eval detectId="ldt:".aid.":".detectId | rex field=data "assigned_to,(?<assigned_to>.*)" | rex field=data "assigned_to_u …

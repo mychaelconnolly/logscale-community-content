@@ -131,3 +131,25 @@ event_platform=win event_simpleName=ProcessRollup2
 | convert ctime(ContextTimeStamp_decimal)
 | rename ContextTimeStamp_decimal as dllReflectiveLoadTime
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+[...]
+| eval n=mvfilter(match(CallStackModuleNames, ".*\.exe.*") OR match(CallStackModuleNames, ".*\.dll.*"))
+[...]
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] SnooCookies3976:** How does CreateThreadReflectiveDll compare to ReflectiveDllOpenProcess?
+
+**A — [CS] Andrew-CS:** >CreateThreadReflectiveDll Signals there was a reflectively loaded DLL on the callstack, or that the target address is in a reflectively loaded DLL. >ReflectiveDllOpenProcess Signals a userspace thread attempted to open a process which appeared to originate from a reflectively loaded DLL.
+
+**Q — [Community] AnalogJones:** "Cool Query Friday" is awesome. I am new to this column and I've been playing with all of the queries offered! I was having trouble with this Call Stack thread, though. Starting on Step #3 I would continue to get Event data, but no stats/visualization data. Can you help me understand what is broken? …
+
+**A — [CS] Andrew-CS:** >event\_platform=win event\_simpleName=ProcessRollup2 CallStackModuleNames=\* > >| eval CallStackModuleNames=split(CallStackModuleNames, "|") > >| eval n=mvfilter(match(CallStackModuleNames, "exe") OR match(CallStackModuleNames, "dll")) > >| rex field=n ".\*\\\\\\\\Device\\\\\\\\HarddiskVolume\\d+(?<loadedFile>.\*(\\.dll|\\.exe)).\*" > >| table ComputerName FileName CallStackModuleNames loadedFile > >| head 2 Hi there. Both should work as what is in those quotes (in the bolded line) is a regular …

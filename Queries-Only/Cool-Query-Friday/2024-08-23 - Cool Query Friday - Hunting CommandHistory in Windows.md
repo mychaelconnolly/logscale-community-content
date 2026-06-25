@@ -98,3 +98,32 @@ Welcome to our seventy-seventh installment of Cool Query Friday. The format will
 // Format ProcessStartTime to human-readable
 | ProcessStartTime:=ProcessStartTime*1000 | ProcessStartTime:=formatTime(format="%F %T.%L %Z", field="ProcessStartTime")
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+// Calculate length of CommandHistory event
+| CommandLength:=length(CommandHistory) 
+
+// Aggregate to merge PR2 and CH events
+| groupBy([aid, TargetProcessId], function=([
+    collect([ProcessStartTime, ComputerName, UserName, UserSid, ExecutionChain, CommandLength, CommandHistoryClean])]), limit=max)
+```
+— [CS] Andrew-CS · comment score 2
+
+```cql
+// Check to see if event name is CommandHistory
+    #event_simpleName=CommandHistory
+    // This is keyword list; modify as desired
+    | CommandHistory=/(add|user|password|pass|stop|start)/i
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] LongRichardMan:** If I wanted the query to only detect if it matched ALL of the keywords or, say only if the command history has 3 of the keywords listed. Is there a way to accomplish that?
+
+**A — [CS] Andrew-CS:** It would be pretty simple, honestly. // Get CommandHistory with keywords and ProcessRollup2 events on Windows event_platform=Win (#event_simpleName=CommandHistory CommandHistory=/word1/i CommandHistory=/word2/i CommandHistory=/word3/i) OR (#event_simpleName=ProcessRollup2) You can change the first line to that and remove the following from the case statement: // Check to see if event name is CommandHistory #event_simpleName=CommandHistory // This is keyword list; modify as desired | CommandHisto …

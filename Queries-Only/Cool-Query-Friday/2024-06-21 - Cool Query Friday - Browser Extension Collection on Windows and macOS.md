@@ -99,3 +99,58 @@ BrowserExtensionInstallMethod="5" | BrowserExtensionInstallMethod:="Third-Party 
 *;
 }
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| !in(BrowserExtensionId, values=[
+aapocclcgogkmnckokdopfmhonfmgoek, // (Slides)
+aohghmighlieiainnegkcijnfilokake, // (Docs)
+lmjegmlicamnimmfhcmpkclmigmmcbeh, // (Application Launcher For Drive (by Google))
+ghbmnnjooekpmoecnnnilnnbdlolhkhi, // (Google Docs Offline)
+felcaaldnbdncclmgdcncolpebgiejap, // (Sheets)
+jlhmfgmfgeifomenelglieieghnjghma, // (Cisco Webex Extension)
+jhknlonaankphkkbnmjdlpehkinifeeg, // (Google Forms)
+nmmhkkegccagdldgiimedpiccmgmieda, // (Chrome Web Store Payments)
+nckgahadagoaajjgafhacjanaoiihapd // (Google Hangouts)
+])
+```
+— [Community] blahdidbert · comment score 2
+
+```cql
+| !match(file="good_extensions.csv", column="BrowserExtensionId", field=BrowserExtensionId)
+```
+— [CS] Andrew-CS · comment score 1
+
+```cql
+// Get browser extension event
+#event_simpleName=InstalledBrowserExtension BrowserExtensionId!="no-extension-available"
+// Normalize timestamp
+| BrowserExtensionInstalledTimestamp:=BrowserExtensionInstalledTimestamp*1000
+// Get detla from install time to now in milliseconds
+| InstallDelta:=now()-BrowserExtensionInstalledTimestamp
+// Check to see if installed in last 7 days in milliseconds
+| InstallDelta>=86400000
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] blahdidbert:** Absolutely true but a couple questions: 1. What are the roles that someone needs to have to create, update, delete lookup files? 2. What would be the syntax to exclude a lookup file instead?
+
+**A — [CS] Andrew-CS:** 1. Falcon Admin &#8203; | !match(file="good_extensions.csv", column="BrowserExtensionId", field=BrowserExtensionId) You would want to upload a csv with the column BrowserExtensionId that includes the common or allowed extensions. This would exclude them from results. You could also manage a list of unapproved extensions and hunt against that list.
+
+**Q — [Community] festivusmiracle:** So how do you know what the numerical values for some of these fields represents? Like for the BrowserName=3, you convert the 3 to Chrome. And the BrowserExtensionInstallMethod=4 you convert to Sideload. Is there a way to know all of the possible values so we can make them all human readable? Thank …
+
+**A — [CS] Andrew-CS:** Yes sir. They are in the Event Data Dictionary. There's a screen shot (second one) in the post above.
+
+**Q — [Community] Beeefin:** Is there a way to query only recently installed browser extensions?
+
+**A — [CS] Andrew-CS:** Yes. You can verify against the field `BrowserExtensionInstalledTimestamp`. This would be q short example. // Get browser extension event #event_simpleName=InstalledBrowserExtension BrowserExtensionId!="no-extension-available" // Normalize timestamp | BrowserExtensionInstalledTimestamp:=BrowserExtensionInstalledTimestamp*1000 // Get detla from install time to now in milliseconds | InstallDelta:=now()-BrowserExtensionInstalledTimestamp // Check to see if installed in last 7 days in milliseconds | …
+
+**Q — [Community] Old_Organization9205:** Is it possible to group all Domain Names (URLs) which were called by each extension? Final outcome would be to lookup those URLs in a search for malicious ones.
+
+**A — [CS] Andrew-CS:** It would not be possible to tell since the chrome process is resolving those domains and not the extension itself.

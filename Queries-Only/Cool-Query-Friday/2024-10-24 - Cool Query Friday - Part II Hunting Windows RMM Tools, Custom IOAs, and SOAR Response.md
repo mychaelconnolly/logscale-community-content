@@ -69,3 +69,17 @@ Welcome to our eighty-first installment of Cool Query Friday. The format will be
 | rename([[rmm_program,RuleName],[rmm_binary,BinaryCoverage]])
 | table([RuleName, pattern_severity, enabled, description, disposition_id, ImageFileName_Regex, BinaryCoverage])
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Operational caveats
+
+> If you have any issues during the import of `RmmToolsIoaGroup.zip`, make sure your API client has the proper permissions and that you're using the latest version of PSFalcon. You can uninstall old versions and install the latest by running these commands (assuming you used the PowerShell Gallery): Uninstall-Module -Name PSFalcon -AllVersions Install-Module -Name PSFalcon
+— [CS] bk-CS · score 6
+
+### Q&A
+
+**Q — [Community] Dtektion_:** How can we get these IOAs if our ORG does not create APIs for users?
+
+**A — [CS] Andrew-CS:** You could also just run the second query above as that shows the regex syntax... but if you can't create API keys I don't think you can create Custom IOA Rules either. You need to have the user permission to do one or the other.

@@ -99,3 +99,16 @@ Welcome to our eighty-fifth installment of Cool Query Friday (on a Monday). The 
 | rename([[RemoteAddressIP4.country, Country], [RemoteAddressIP4.city, City], [RemoteAddressIP4.state, State], [RemoteAddressIP4.lat, Latitude], [RemoteAddressIP4.lon, Longitude]])
 | table([LogonTime, cid, aid, ComputerName, UserName, UserSid, RemoteAddressIP4, Country, State, City, Latitude, Longitude], limit=20000)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Q&A
+
+**Q — [Community] cobaltpsyche:** I am curious, if I use AI to review data and send an email, how can I set this up to NOT send an email of nothing of interest was found?
+
+**A — [CS] Andrew-CS:** Yup! So you want to use Fusion to create a boolean variable, then prompt the LLM to populate the variable based on its findings. So say you create a variable named "Suspicious." You might ask the LLM to populate that variable with "true" if it has high confidence findings and "false" if it does not. You can then use an IF statement to say, "IF Suspicious is equal to true, email. Else, exit."
+
+**Q — [Community] Critical_Quarter_245:** Do you have any examples of using agentic AI to triage alerts and reducing false positives? Maybe cross referencing with other data sources, threat intel, or data in a workflow?
+
+**A — [CS] Andrew-CS:** If you have a Charlotte AI license, you have "Triage with Charlotte." That will automatically generate: 1. Recommendation (Escalate or not) 2. Escalation priority (number to give weighting to the escalation recommendation) 3. Verdict (true\_positive, false\_positive, inconclusive) 4. Verdict confidence (High, Medium, Low, Inconclusive) There is also a summary of why the above categories were set the way they were. [https://imgur.com/a/i3I4YmW](https://imgur.com/a/i3I4YmW) So you could take the r …

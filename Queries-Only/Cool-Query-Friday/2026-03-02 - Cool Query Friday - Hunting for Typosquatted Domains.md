@@ -156,3 +156,57 @@ Welcome back to another installment of [Cool Query Friday](https://www.reddit.co
 
 | drop(rootURL)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+// Technique: T1036.005 - Masquerading: Match Legitimate Name or Location
+#event_simpleName=ProcessRollup2
+
+// Extract just the filename from the full path
+| ImageFileName=/(?<process_name>[^\\\/]+)$/
+
+// Calculate Levenshtein distance against the legitimate process name
+| text:editDistance(
+    target=process_name,
+    reference="svchost.exe",
+    maxDistance=5,
+    ignoreCase=true,
+    as=name_distance)
+
+// Exclude exact matches — we want near-misses only
+| name_distance > 0
+
+// Keep only close lookalikes (1-2 edits = high confidence masquerading)
+| name_distance <= 2
+
+// Exclude known legitimate Windows binaries that fall within edit distance
+| !in(process_name, values=[
+    "sihost.exe",
+    "conhost.exe",
+    "dllhost.exe",
+    "taskhost.exe",
+    "wshost.exe",
+    "srmhost.exe",
+    "SMSvcHost.exe"
+  ])
+
+// Sort by closest match for triage priority
+| groupBy([process_name, name_distance], function=[count(as=execution_count), collect([ComputerName, ImageFileName, CommandLine, ParentBaseFileName, UserName, SHA256HashData])], limit=10000)
+| sort(name_distance, order=asc)
+```
+— [Community] strawhatintel · comment score 2
+
+```cql
+| groupBy([Observed_Domain,Reference_Domain,lev_dist], function=[selectLast(@timestamp),collect([DomainName,ComputerName,aid])], limit=max)
+```
+— [CS] Dylan-CS · comment score 5
+
+### Q&A
+
+**Q — [Community] Charming_Antelope452:** Is it possible to swap out the domains array (references=\["crowdstrike.com","servicenowservices.com"\]) for references=\[match(domainslist.csv ...)? This would help clean up the rule when looking for many domains, i tried to get it work but it wouldnt produce any results Thanks
+
+**A — [CS] Dylan-CS:** Hi! As of now, there's not a great way to accomplish that. I've passed along your feedback to the team.

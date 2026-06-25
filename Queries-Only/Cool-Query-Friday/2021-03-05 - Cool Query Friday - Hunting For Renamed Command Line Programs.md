@@ -65,3 +65,24 @@ event_platform=win event_simpleName=ProcessRollup2 ImageSubsystem_decimal=3
 | search FileName=cmd.exe
 | stats dc(aid) as "System Count" count(aid) as "Execution Count" values(runningExe) as "File On Disk" values(FileName) as "Cloud File Name" values(FileDescription) as "File Description" by SHA256HashData
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| search NOT FileName IN (cmd.exe, powershell.exe)
+```
+— [CS] Andrew-CS · comment score 1
+
+```cql
+| search NOT SHA256HashData IN (hash1, hash2)
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] yankeesfan01x:** Is there a way to exclude a specific file on disk by chance (say if you know it's a legit action)?
+
+**A — [CS] Andrew-CS:** Sure thing. Add this between the first and the second line of the query... | search NOT FileName IN (cmd.exe, powershell.exe) You could also do by SHA256 | search NOT SHA256HashData IN (hash1, hash2)

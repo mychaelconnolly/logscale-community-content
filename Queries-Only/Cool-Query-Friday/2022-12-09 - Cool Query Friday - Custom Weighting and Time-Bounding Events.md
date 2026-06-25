@@ -169,3 +169,17 @@ event_platform=win event_simpleName=ProcessRollup2 FileName IN (net.exe, net1.ex
   | sort -behaviorWeight, -fileCount
   | convert ctime(timeBucket)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Operational caveats
+
+> >What is the purpose of true(),null() in the case statement? This basically says, "if you do not match any of the case statements, set that value of the field `behaviorWeight` to null" (so it will be blank). >In the Event Search version, should 'OR behaviorWeight > 30' be added to the fourth line from the end '| where fileCount > 5'? Yup! You can add conditions for matching if you'd like!
+— [CS] Andrew-CS · score 2
+
+### Q&A
+
+**Q — [Community] Qbert513:** Two questions: 1. What is the purpose of true(),null() in the case statement? 2. In the Event Search version, should 'OR behaviorWeight > 30' be added to the fourth line from the end '| where fileCount > 5'?
+
+**A — [CS] Andrew-CS:** >What is the purpose of true(),null() in the case statement? This basically says, "if you do not match any of the case statements, set that value of the field `behaviorWeight` to null" (so it will be blank). >In the Event Search version, should 'OR behaviorWeight > 30' be added to the fourth line from the end '| where fileCount > 5'? Yup! You can add conditions for matching if you'd like!

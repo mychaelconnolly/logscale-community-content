@@ -127,3 +127,29 @@ Welcome to our sixty-third installment of Cool Query Friday. The format will be:
 // Add link to graph explorer in US-2
 | format("[Graph Explorer](https://falcon.us-2.crowdstrike.com/graphs/process-explorer/graph?id=pid:%s:%s)", field=["aid", "falconPID"], as="Graph Explorer")
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+// Get specific events and provide option to specify host
+(#event_simpleName=ProcessRollup2 CommandLine!=/PcaPatch/i) OR (#event_simpleName=DnsRequest)
+
+// Normalize UPID value | falconPID:=TargetProcessId | falconPID:=ContextProcessId
+
+// Use selfJoin to filter our instances on only one event happening | selfJoinFilter(field=[aid, falconPID], where=[{#event_simpleName=ProcessRollup2}, {#event_simpleName=DnsRequest}])
+
+// Aggregate to include desired fields | groupBy([aid, falconPID], function=([collect([ComputerName, UserName, ParentBaseFileName, FileName, DomainName, CommandLine])]))
+
+// Remove false negatives from selfJoinFilter
+| CommandLine=* DomainName=*
+```
+— [CS] Andrew-CS · comment score 2
+
+### Q&A
+
+**Q — [Community] amjcyb:** If `CommandLine` field was part of `DnsRequest` event life will be much easier :)!! Any how, I'm addapting to the new CQL. One doubt I got here is related with how do I omit results. I've tried different ways to exclude parameters, for example: ``` | selfJoinFilter(field=[aid, falconPID], where=[{#e …
+
+**A — [CS] Andrew-CS:** Hi there. The second one is more efficient. If you have a large dataset, you could have false negatives in the mix with selfJoinFilter — it does this awesome nondeterministic thing to keep itself fast.. You can do this to omit them. // Get specific events and provide option to specify host (#event_simpleName=ProcessRollup2 CommandLine!=/PcaPatch/i) OR (#event_simpleName=DnsRequest) // Normalize UPID value | falconPID:=TargetProcessId | falconPID:=ContextProcessId // Use selfJoin to filter our in …

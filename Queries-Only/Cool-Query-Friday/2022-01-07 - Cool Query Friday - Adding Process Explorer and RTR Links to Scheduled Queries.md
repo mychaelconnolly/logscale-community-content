@@ -58,3 +58,58 @@ index=main sourcetype=ProcessRollup* event_platform=win event_simpleName=Process
 | eval processExplorer="https://falcon.crowdstrike.com/investigate/process-explorer/" .aid. "/" . latestFalconPID
 | eval startRTR="https://falcon.crowdstrike.com/activity/real-time-response/console/?start=hosts&aid=".aid
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+// Specify data source and simpleName (index)
+#type = FDR "#event_simpleName" = ProcessRollup2
+
+// search for net.exe and net1.exe (including path, hence the wildcard)
+| ImageFileName =~ in(values=["*\\net.exe", "*\\net1.exe"])
+
+// search commandline (case insenitive) 
+| CommandLine =~ regex(".*group\s+.*admin.*", flags="i")
+
+// group data and summarize
+| groupBy(["#cid", "aid", "UserSid", "ImageFileName", "CommandLine"], function=[count(as=executionCount), selectLast(["TargetProcessId"])])
+
+// enrich sid -> username and aid -> ComputerName, not in the ProcessRollup event when through FDR
+| join({#type = FDR #event_simpleName = "UserIdentity" | groupBy(["#cid", "aid", "UserSid"], function=selectLast(["UserName"]))}, include="UserName", field=["#cid", "aid", "UserSid"])
+| join({#type = FDR #event_simpleName!=* EventType != "Event_ExternalApiEvent" | groupBy(["#cid", "aid"], function=selectLast(["ComputerName"]))}, include="ComputerName", field=["#cid", "aid"])
+
+// Create RTR and PE links, Humio supports markdown!
+| RTR := format("[RTR](https://falcon.eu-1.crowdstrike.com/activity/real-time-response/console/?start=hosts&aid=%s)",field=["aid"])
+| "Process Explorer" := format("[Explore](https://falcon.eu-1.crowdstrike.com/investigate/process-explorer/%s/%s)", field=["aid", "TargetProcessId"])
+
+// Split string to only get filename
+| FileName := splitString(field="ImageFileName", by="\\\\", index="-1")
+
+// Table the output!
+| table(["aid", "ComputerName", "UserName", "FileName", "UserSid", "CommandLine", "executionCount", "TargetProcessId", "RTR", "Process Explorer"])
+```
+— [Community] ts-kra · comment score 3
+
+```cql
+"Process Explorer.region" := ?region
+| "Process Explorer.region" := upper("Process Explorer.region")
+| case {
+    "Process Explorer.region" =  "US-1" | "Process Explorer" := format("[Process Explorer](https://falcon.crowdstrike.com/investigate/process-explorer/%s/%s)", field=["aid", "TargetProcessId"]);
+    "Process Explorer.region" = "US-2" | "Process Explorer" := format("[Process Explorer](https://falcon.us-2.crowdstrike.com/investigate/process-explorer/%s/%s)", field=["aid", "TargetProcessId"]);
+    "Process Explorer.region" = "EU" | "Process Explorer" := format("[Process Explorer](https://falcon.eu-1.crowdstrike.com/investigate/process-explorer/%s/%s)", field=["aid", "TargetProcessId"]);
+    "Process Explorer.region" = "GOV" | "Process Explorer" := format("[Process Explorer](https://falcon.laggar.gcw.crowdstrike.com/investigate/process-explorer/%s/%s)", field=["aid", "TargetProcessId"]);
+    @function.error := "Invalid region selected!"
+}
+```
+— [Community] ts-kra · comment score 3
+
+```cql
+[...]
+| eval CommandLine=lower(CommandLine)
+| regex CommandLine=".*group\s+.*admin.*" 
+[...]
+```
+— [CS] Andrew-CS · comment score 3

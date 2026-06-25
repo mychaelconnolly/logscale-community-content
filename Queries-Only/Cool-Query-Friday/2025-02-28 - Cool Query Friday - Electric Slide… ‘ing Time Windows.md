@@ -173,3 +173,25 @@ Welcome to our eighty-third installment of [Cool Query Friday](https://www.reddi
 // Final field organization
 | groupBy([aid, ComputerName, event_platform, LastSuccessfulLogon, LastLogonTime, FailedLogonAccounts, FailedLogonAttempts, "User Search", "Asset Graph", Description], function=[], limit=max)
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+| createEvents(["name=andrew-cs, shirt_color=blue", "name=andrew-cs, shirt_color=red", "name=andrew-cs, shirt_color=green"])
+| kvParse()
+| groupBy([name], function=([collect([shirt_color])]))
+
+| createEvents(["name=andrew-cs, shirt_color=blue", "name=andrew-cs, shirt_color=red", "name=andrew-cs, shirt_color=green"])
+| kvParse()
+| groupBy([name], function=([collect([shirt_color], multival=false)]))
+```
+— [CS] Andrew-CS · comment score 1
+
+### Q&A
+
+**Q — [Community] sixstringacks:** I’m trying the understand the multival parameter of collect a little better and the documentation is not clear. Can you explain the purpose of setting multival to false? Reviewing the results of the first groupBy query, setting multival=false or multival=true does not seem to affect the results.
+
+**A — [CS] Andrew-CS:** In the query above, it's to account for an edge case where two users with distinct user names attempt to login at the EXACT same time (down to the millisecond). I don't even know if that's possible, but that's why it's there. To see what multival does, run these two queries... | createEvents(["name=andrew-cs, shirt_color=blue", "name=andrew-cs, shirt_color=red", "name=andrew-cs, shirt_color=green"]) | kvParse() | groupBy([name], function=([collect([shirt_color])])) | createEvents(["name=andrew-c …

@@ -55,3 +55,20 @@ earliest=-1month ExternalApiType=Event_DetectionSummaryEvent MachineDomain="acme
 | timechart count(AgentIdString) as detectionCount by Tactic span=1w
 | sort + _time
 ```
+
+## Community & Staff Additions
+*Harvested from this post's [r/CrowdStrike](https://www.reddit.com/r/crowdstrike/) comment thread — not part of the original CQF post. **[CS]** = CrowdStrike staff · **[Community]** = other r/CrowdStrike users. Upvote scores shown for context.*
+
+### Query variants
+
+```cql
+ExternalApiType=Event_DetectionSummaryEvent 
+| rename AgentIdString AS aid | lookup local=true aid_master aid OUTPUT aip | iplocation aip | geostats latfield=lat longfield=lon count by Tactic
+```
+— [CS] Andrew-CS · comment score 3
+
+### Q&A
+
+**Q — [Community] MaxSecurity:** Do you know if Sub-Technique is plan to be add by Crowdstrike in the log ?
+
+**A — [CS] Andrew-CS:** Yup! https://supportportal.crowdstrike.com/s/article/Tech-Alert-1st-Notice-MITRE-ATT-CK-Framework-Changes-in-31-Days
